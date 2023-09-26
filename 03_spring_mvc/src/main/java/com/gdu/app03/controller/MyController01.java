@@ -1,0 +1,54 @@
+package com.gdu.app03.controller;
+
+import org.springframework.stereotype.Controller;
+import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestMethod;
+
+@Controller  //컨트롤러를 만드는 Annotation
+public class MyController01 {
+  
+  /*
+   * 요청/응답을 처리할 메소드를 만든다
+   * 
+   * 1. 반환타입
+   *  1) String : 응답할 jsp의 이름을 반환한다
+   *  2) void   : 컨트롤러가 호출한 서비스에서 직접 응답한다.   요청 주소를 Jsp 이름으로 인식한다.
+   *  3) 기타   : 비동기 통신에서 데이터를 응답한다.
+   * 
+   * 2. 메소드명
+   * - 아무 일도 안 한다.
+   * 3. 매개변수
+   *  1)HttpServletRequest를 선언해서 사용할 수 있다.
+   *  2)HttpservletResponse를 선언해서 사용할 수 있다.
+   *  
+   * 
+   * 4.요청 (@RequestMapping)
+   *  1)메소드: GET, POST
+   *  2) URL  : 요청 주소
+   */
+  
+  
+  //value="/":contextPath 요청을 의미한다. http://localhost/app03/ 주소를 의미한다.
+  //겟 방식으로 컨텍스트패스 요청했을 때
+  //요청을 두개이상 처리해야 할때는
+  //@RequestMapping(value = {"/","/index.do"},method = RequestMethod.GET)
+  @RequestMapping(value = "/",method = RequestMethod.GET)
+  public String welcome() {
+    
+    // ViewResolver의 prefix: /WEB-INF/views/
+    // ViewResolver의 suffix: .jsp
+    //이걸 열어주시오
+    return "index";
+    
+  }
+  
+  //정상적으로jsp를 열어줄 수 있도록 하기
+  @RequestMapping(value = "board/list.do",method = RequestMethod.GET)
+  public String boardList() {
+    
+    
+    //이걸 열어
+    return "board/list";
+  }
+  
+}

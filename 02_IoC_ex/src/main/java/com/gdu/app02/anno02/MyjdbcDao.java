@@ -1,20 +1,18 @@
-package com.gdu.app02.xml02;
+package com.gdu.app02.anno02;
 
 import java.sql.Connection;
 
+import org.springframework.context.annotation.AnnotationConfigApplicationContext;
 import org.springframework.context.support.AbstractApplicationContext;
-import org.springframework.context.support.GenericXmlApplicationContext;
+
 
 public class MyjdbcDao {
   private Connection con;
-  
-  
- private AbstractApplicationContext ctx;
  private MyjdbcConnection myjdbcConnection;
  
 //반환값 MyjdbcConnection 클래스의 getConnection() 메소드를 호출
-  public Connection getConnection() {
-    ctx=new GenericXmlApplicationContext("xml02/appCtx.xml");
+  private Connection getConnection() {
+    AbstractApplicationContext ctx=new AnnotationConfigApplicationContext(AppConfig.class);
     myjdbcConnection=ctx.getBean("myjdbcConnection",MyjdbcConnection.class);
     ctx.close();
     return myjdbcConnection.getConnection();
