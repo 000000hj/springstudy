@@ -25,6 +25,22 @@
   </div>
   
   
- <%--  --%>
+ <%--MyController03으로 요청  --%>
+ <div>
+  <a href="${contextPath}/blog/detail.do?blogNo=100">블로그 상세보기</a>
+ </div>
+ 
+ 
+ 
+ <%--MyController04으로 요청  --%>
+ <div>
+ <a href="${contextPath}/article/add.do?title=야임마 웬 말이 그렇게 많아">기사 등록하기</a>
+</div>
+
+
+<div>
+
+<a href=""></a>
+</div>
 </body>
 </html>

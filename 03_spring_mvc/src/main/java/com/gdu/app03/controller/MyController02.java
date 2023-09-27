@@ -17,7 +17,7 @@ public class MyController02 {
     
     // ViewResolver의 prefix: /WEB-INF/views/
     // ViewResolver의 suffix: .jsp
-    return "notice/list"; //   /WEB-INF/views/notice/list.jsp
+    return "notice/list"; //   /WEB-INF/views/notice/list.jsp  
   }
   
   
@@ -26,7 +26,7 @@ public class MyController02 {
   // /member/list     요청을 /member/list.jsp 경로로 인식한다.
   // 1. 서비스에 응답하기를 기대
   //2. 주소를 jsp 경로로 바꿔서 찾음
-  @GetMapping(value = "/member/list.do")
+  @GetMapping(value = {"/member/list.do","/member/list"})
   public void memberList() {
     
   }

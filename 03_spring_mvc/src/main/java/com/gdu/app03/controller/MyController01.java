@@ -20,7 +20,8 @@ public class MyController01 {
    * 3. 매개변수
    *  1)HttpServletRequest를 선언해서 사용할 수 있다.
    *  2)HttpservletResponse를 선언해서 사용할 수 있다.
-   *  
+   *  3)Model을 선언해서 forward할 정보를 저장할 수 있다.
+   *  4)HttpSession을 선언해서 사용할 수 있다.
    * 
    * 4.요청 (@RequestMapping)
    *  1)메소드: GET, POST
@@ -32,13 +33,13 @@ public class MyController01 {
   //겟 방식으로 컨텍스트패스 요청했을 때
   //요청을 두개이상 처리해야 할때는
   //@RequestMapping(value = {"/","/index.do"},method = RequestMethod.GET)
-  @RequestMapping(value = "/",method = RequestMethod.GET)
+  @RequestMapping(value = "/",method = RequestMethod.GET)// return에 명시된 파일을 열기 위한 경로
   public String welcome() {
     
     // ViewResolver의 prefix: /WEB-INF/views/
     // ViewResolver의 suffix: .jsp
     //이걸 열어주시오
-    return "index";
+    return "index";//열으려는것
     
   }
   
