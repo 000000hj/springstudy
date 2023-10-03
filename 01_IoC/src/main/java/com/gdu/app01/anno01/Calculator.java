@@ -1,5 +1,10 @@
 package com.gdu.app01.anno01;
 
+import lombok.AllArgsConstructor;
+import lombok.Data;
+import lombok.NoArgsConstructor;
+
+@NoArgsConstructor
 public class Calculator {
 
   //no field 

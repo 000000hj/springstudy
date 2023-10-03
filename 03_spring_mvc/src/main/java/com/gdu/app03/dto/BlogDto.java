@@ -7,11 +7,7 @@ import lombok.NoArgsConstructor;
 @NoArgsConstructor
 @AllArgsConstructor
 @Data
-
 public class BlogDto {
-
-  
   private int blogNo;
   private String title;
-  
 }
