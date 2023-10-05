@@ -9,7 +9,9 @@ import org.springframework.web.bind.annotation.RequestMethod;
 import com.gdu.app05.service.BoardService;
 import com.gdu.app05.service.BoardServiceImpl;
 
-@Controller
+
+//스프링에게 가져다 쓰라고 명시해주는게 컴포넌트
+@Controller //컨트롤러 전용 컴포넌트 @Component
 public class BoardController {
 
   /*
@@ -51,26 +53,52 @@ public class BoardController {
    *  3) Setter 형식의 메소드에 주입하기
    */
   
-  @Autowired
+  
+  
+  
+  /*****************************DI********************************/
+ /* 
+  * @Autowired
   private BoardService boardService = new BoardServiceImpl();
+  와 같은것을 의미하는 @Autowired 방식 3가지(컨테이너에 저장된정보를 자동으로 가져오는 방법)
+  */
+
   
-  @RequestMapping(value="/board/list.do", method=RequestMethod.GET)
-  public String list(Model model) {
-    model.addAttribute("boardList", boardService.getBoardList());
-    return "board/list";
-  }
+  private final BoardService boardService;
   
+  
+  
+
+  //BoardService에 final처리를 하면 생성자 주입만 가능하다. (필드 주입과 Setter주입은 불가능하다)
+  //Autowired는 생략할 수 있으므로 @RequiredArgsConstructor와 같은 Annotation으로 대체할 수 있다.
+  
+  //2. 생성자에 Autowired를 붙여줄것
+
   @Autowired
   public BoardController(BoardService boardService) {
 super();
 this.boardService=boardService;
   }
 
-  
-  @Autowired
+
+  //3. 세터에 Autowired를 붙여줄것
+  /*
+   * @Autowired
   public void setBoardService(BoardService boardService) {
     this.boardService = boardService;
   }
+  */
+/*****************************Method********************************/
+  @RequestMapping(value="/board/list.do", method=RequestMethod.GET)
+  public String list(Model model) {
+    model.addAttribute("boardList", boardService.getBoardList());
+    return "board/list";
+  }
+  
+
+
+  
+
   
   
 }
