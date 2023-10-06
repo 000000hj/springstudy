@@ -1,4 +1,4 @@
-package com.gdu.app07.controller;
+package com.gdu.app08.controller;
 
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -33,5 +33,13 @@ public class MvcController {
   public String ajax4() {
     return "ajax4";
   }
+  
+  
+
+  @RequestMapping(value="/shop.go", method=RequestMethod.GET)
+  public String shop() {
+    return "shop";
+  }
+  
   
 }

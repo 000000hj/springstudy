@@ -31,6 +31,6 @@ public class AjaxController1 {
   @RequestMapping(value = "/detail.do",method=RequestMethod.GET,produces="application/json; charset=UTF-8")
   public AjaxDto detail(@RequestParam(value = "name")String name) {
     System.out.println(name);
-    return ajaxService.getDto(name);
+    return ajaxService.getDto(name);//jackson 라이브러리가  AjaxDto json데이터(객체) 로 자동 변환한다.
   }
 }
