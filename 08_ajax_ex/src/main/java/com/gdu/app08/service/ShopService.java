@@ -4,7 +4,5 @@ import java.util.Map;
 
 public interface ShopService {
 
-  public Map<String, Object>getResult(String query);
-  
-  
+ public Map<String, Object> getSearchInfo(String query);
 }

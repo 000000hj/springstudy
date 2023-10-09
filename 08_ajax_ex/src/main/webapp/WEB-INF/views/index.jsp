@@ -59,7 +59,7 @@
 
 
 <div>
-<a href="${contextPath}/shop.go">쇼핑하러가기</a>
+<a href="${contextPath}/shop/shop.go">쇼핑하러가기</a>
 </div>
 
 

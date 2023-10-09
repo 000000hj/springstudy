@@ -10,20 +10,31 @@
 <script src="https://code.jquery.com/jquery-3.7.1.min.js" integrity="sha256-/JqT3SQfawRcv/BIHPThkBvs0OEvtFFmqPF/lYI/Cxo=" crossorigin="anonymous"></script>
 <script>
 $(function() {
-	fnQuiry();
+	fnQuery();
 })
 
-function fnQuiry() {
+function fnQuery() {
 	$('#btn_search').click(function() {
 		$.ajax({
 			type:'get',
-			url:'{contextPath}/shop/query.search',
-			data: 'query=' + $('#query').val()+'display='+$('display'),
+			url:'${contextPath}/shop/search.do',
+			data:'query=' + $('#query').val(),
+			
 			dataType:'json',
 			success:function(resData){
-				
-				alert('a');
-				
+				  $('#list').empty();
+				  
+				  
+				  $.each(resData.item, function(i, elem){
+
+					
+					  $('#list').append('<tr><td>'+"상품명"+'</td><td>'+'썸네일'+'</td><td>'+'멀라'+'</td><td>'+'판매처'+'</td></tr>');
+					  
+			          })
+				  
+				 
+					  
+			
 			}
 			
 		})
@@ -35,7 +46,7 @@ function fnQuiry() {
 
   <div id="mainWrapper">
   <h2>주말에 풀어보기</h2>
-  <form>
+  <form id="frm_info">
   
   <div>
     <label for="display">검색결과건수</label>
@@ -83,7 +94,7 @@ function fnQuiry() {
 </tr>
 
 </thead>
-<tbody></tbody>
+<tbody id="list"></tbody>
 
 </table>
 

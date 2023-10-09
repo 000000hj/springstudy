@@ -11,35 +11,10 @@ public class MvcController {
   public String index() {
     return "index";
   }
-  
-  @RequestMapping(value="/ajax1.do", method=RequestMethod.GET)
-  public String ajax1() {
-    return "ajax1";
-  }
 
-  @RequestMapping(value="/ajax2.do", method=RequestMethod.GET)
-  public String ajax2() {
-    return "ajax2";
-  }
-  
-  @RequestMapping(value="/ajax3.do", method=RequestMethod.GET)
-  public String ajax3() {
-    return "ajax3";
-  }
-  
-  
-  
-  @RequestMapping(value="/ajax4.do", method=RequestMethod.GET)
-  public String ajax4() {
-    return "ajax4";
-  }
-  
-  
-
-  @RequestMapping(value="/shop.go", method=RequestMethod.GET)
+  @RequestMapping(value="/shop/shop.go", method=RequestMethod.GET)
   public String shop() {
     return "shop";
   }
-  
-  
+
 }
