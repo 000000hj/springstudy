@@ -10,18 +10,19 @@ import com.gdu.prj01.dto.BoardDto;
 public class MainWrapper {
 
   public static void main(String[] args) {
-
-    AbstractApplicationContext ctx=new GenericXmlApplicationContext("com/gdu/prj01/app-context.xml");
-   BoardDto boardDto1 =ctx.getBean("board1",BoardDto.class); // 타입 작성할때 .class 를 붙여야 타입이 된다. ("bean의 이름", 타입)
+  
+    AbstractApplicationContext ctx = new GenericXmlApplicationContext("com/gdu/prj01/app-context.xml");
+    BoardDto boardDto1 = ctx.getBean("board1", BoardDto.class);
     System.out.println(boardDto1);
-    BoardDto boardDto2 =(BoardDto)ctx.getBean("board2"); 
+    BoardDto boardDto2 = (BoardDto)ctx.getBean("board2");
     System.out.println(boardDto2);
     ctx.close();
     
-    AbstractApplicationContext ctx2=new AnnotationConfigApplicationContext(AppConfig.class);
-    BoardDto boardDto3 =ctx2.getBean("board3",BoardDto.class); 
-    System.out.println(boardDto3);  
+    AbstractApplicationContext ctx2 = new AnnotationConfigApplicationContext(AppConfig.class);
+    BoardDto boardDto3 = ctx2.getBean("board3", BoardDto.class);
+    System.out.println(boardDto3);
     ctx2.close();
+    
   }
 
 }

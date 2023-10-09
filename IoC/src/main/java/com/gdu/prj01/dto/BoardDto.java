@@ -8,7 +8,6 @@ import lombok.NoArgsConstructor;
 @AllArgsConstructor
 @Data
 public class BoardDto {
-
   private int boardNo;
   private String title;
   private UserDto userDto;
