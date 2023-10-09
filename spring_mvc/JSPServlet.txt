@@ -1,0 +1,13 @@
+JSP/Servlet
+
+요청 -> Servlet
+	Controller
+
+--------------------
+Spring
+
+
+요청/응답 -> 	DispacherServlet 			< - >   Controller
+		servlet-context.xml
+
+		return "WEB-INF/views/index.jsp"   	<-	return "index"
