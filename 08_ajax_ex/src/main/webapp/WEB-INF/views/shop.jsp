@@ -24,13 +24,14 @@ function fnQuery() {
 			success:function(resData){
 				  $('#list').empty();
 				  
-				  
-				  $.each(resData.item, function(i, elem){
+				
+				  console.log(resData);
+				//  $.each(resData.item, function(i, elem){
 
 					
-					  $('#list').append('<tr><td>'+"상품명"+'</td><td>'+'썸네일'+'</td><td>'+'멀라'+'</td><td>'+'판매처'+'</td></tr>');
+					//  $('#list').append('<tr><td>'+"상품명"+'</td><td>'+'썸네일'+'</td><td>'+'멀라'+'</td><td>'+'판매처'+'</td></tr>');
 					  
-			          })
+			     // })
 				  
 				 
 					  

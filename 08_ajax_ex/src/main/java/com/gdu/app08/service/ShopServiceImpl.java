@@ -119,7 +119,7 @@ public Map<String, Object> getSearchInfo(String query) {
 
   
   
-  return Map.of("count",count,"title",title,"items",items,"item",item);
+  return Map.of("title",title,"items",items);
 }
 
 
