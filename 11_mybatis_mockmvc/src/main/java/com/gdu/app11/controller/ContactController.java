@@ -18,14 +18,14 @@ import lombok.RequiredArgsConstructor;
 @RequiredArgsConstructor  // private final ContactService contactService;에 @Autowired를 하기 위한 코드이다.
 @Controller
 public class ContactController {
-
+  
   // ContactController를 실행할 때 org.slf4j.Logger가 동작한다.
   // private static final Logger log = LoggerFactory.getLogger(ContactController.class);
   
   private final ContactService contactService;
   
   @RequestMapping(value="/contact/list.do", method=RequestMethod.GET)
-  public String list(Model model) {
+  public String list(Model model) {  // forward 전달을 위한 Model 선언
     List<ContactDto> contactList = contactService.getContactList();
     model.addAttribute("contactList", contactList);
     return "contact/list";
@@ -39,13 +39,13 @@ public class ContactController {
   @RequestMapping(value="/contact/add.do", method=RequestMethod.POST)
   public String add(ContactDto contactDto, RedirectAttributes redirectAttributes) {
     int addResult = contactService.addContact(contactDto);
-    redirectAttributes.addFlashAttribute("addResult", addResult);
+    redirectAttributes.addFlashAttribute("addResult", addResult);  // flash attribute에 값을 저장
     return "redirect:/contact/list.do";
   }
   
   @RequestMapping(value="/contact/detail.do", method=RequestMethod.GET)
-  public String detail(@RequestParam(value="contact_no", required=false, defaultValue="0") int contact_no, Model model) {
-    model.addAttribute("contact", contactService.getContactByNo(contact_no));
+  public String detail(@RequestParam(value="contactNo", required=false, defaultValue="0") int contactNo, Model model) {
+    model.addAttribute("contact", contactService.getContactByNo(contactNo));  // model에 저장
     return "contact/detail";
   }
   
@@ -53,27 +53,24 @@ public class ContactController {
   public String modify(ContactDto contactDto, RedirectAttributes redirectAttributes) {
     int modifyResult = contactService.modifyContact(contactDto);
     redirectAttributes.addFlashAttribute("modifyResult", modifyResult);
-    return "redirect:/contact/detail.do?contact_no=" + contactDto.getContact_no();
+    return "redirect:/contact/detail.do?contactNo=" + contactDto.getContactNo();
   }
   
   @RequestMapping(value="/contact/delete.do", method=RequestMethod.POST)
-  public String delete(@RequestParam(value="contact_no", required=false, defaultValue="0") int contact_no, RedirectAttributes redirectAttributes) {
-    int deleteResult = contactService.deleteContact(contact_no);
+  public String delete(@RequestParam(value="contactNo", required=false, defaultValue="0") int contactNo, RedirectAttributes redirectAttributes) {
+    int deleteResult = contactService.deleteContact(contactNo);
     redirectAttributes.addFlashAttribute("deleteResult", deleteResult);
     return "redirect:/contact/list.do";
   }
   
-  
-  @RequestMapping(value = "/contact/tx.do",method = RequestMethod.GET)
-  public String txText() {
+  @RequestMapping(value="/contact/tx.do", method=RequestMethod.GET)
+  public String txTest() {
     try {
-      contactService.txText();
-      
+      contactService.txTest();
     } catch (Exception e) {
       return "redirect:/contact/list.do";
-      
     }
-    return null; // 동작 안하는 코드
+    return null;  // 동작 안 하는 코드
   }
   
 }

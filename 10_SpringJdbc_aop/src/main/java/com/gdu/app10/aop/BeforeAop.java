@@ -15,9 +15,9 @@ import org.springframework.web.context.request.ServletRequestAttributes;
 
 import lombok.extern.slf4j.Slf4j;
 
-@Component
-@Slf4j // private static final Logger log = LoggerFactory.getLogger(BeforeAop.class);
+@Slf4j  // private static final Logger log = LoggerFactory.getLogger(BeforeAop.class);
 @Aspect
+@Component
 public class BeforeAop {
 
   // 포인트컷 : 언제 동작하는가?
@@ -27,6 +27,7 @@ public class BeforeAop {
   // 어드바이스 : 무슨 동작을 하는가?
   @Before("setPointCut()")
   public void beforeAdvice(JoinPoint joinPoint) {
+    
     /*
      * Before 어드바이스
      * 1. 반환타입 : void
@@ -34,31 +35,29 @@ public class BeforeAop {
      * 3. 매개변수 : JoinPoint
      */
     
-    
-    /* Controller의 모든 메소드가 동작하기 전에 요청(방식/주소/파라미터) 출력하기*/
-    
+    /* 모든 컨트롤러의 모든 메소드가 동작하기 전에 요청(방식/주소/파라미터) 출력하기 */
+        
     // 1. HttpServletRequest
-      ServletRequestAttributes servletRequestAttributes =(ServletRequestAttributes) RequestContextHolder.getRequestAttributes();
-      HttpServletRequest request= servletRequestAttributes.getRequest();
-      
-      //2. HttpServletRequest - > Map변환
-      Map<String, String[]>map=request.getParameterMap();
-      
-      //3. 요청 파라미터 출력 형태 만들기
-      String params="";
-      if(map.isEmpty()) {
-        params+="[No Parameter]";
-      }else {
-        for(Map.Entry<String, String[]>entry:map.entrySet()) {
-          params+="["+entry.getKey()+":"+Arrays.toString(entry.getValue())+"]";
-        }
-      }
+    ServletRequestAttributes servletRequestAttributes = (ServletRequestAttributes)RequestContextHolder.getRequestAttributes();
+    HttpServletRequest request = servletRequestAttributes.getRequest();
     
-      //4. 로그찍기(치환문자 {} 활용)
-      log.info("{} {}",request.getMethod(),request.getRequestURI());  // 요청방식,요청주소
-      log.info("{}",params);                                          // 요청파라미터
-      
-  
+    // 2. 요청 파라미터 -> Map 변환
+    Map<String, String[]> map = request.getParameterMap();
+    
+    // 3. 요청 파라미터 출력 형태 만들기
+    String params = "";
+    if(map.isEmpty()) {
+      params += "No Parameter";
+    } else {
+      for(Map.Entry<String, String[]> entry : map.entrySet()) {
+        params += entry.getKey() + ":" + Arrays.toString(entry.getValue()) + " ";
+      }
+    }
+    
+    // 4. 로그 찍기 (치환 문자 {} 활용)
+    log.info("{} {}", request.getMethod(), request.getRequestURI());  // 요청 방식, 요청 주소
+    log.info("{}", params);                                           // 요청 파라미터
+    
   }
   
 }
