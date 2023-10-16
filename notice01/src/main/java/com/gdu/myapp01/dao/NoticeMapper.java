@@ -17,5 +17,8 @@ import com.gdu.myapp01.dto.NoticeDto;
 @Mapper
 public interface NoticeMapper {
    public List<NoticeDto> getNoticeList(); // 넘겨줄것은 없고 NoticeDto가 들은 리스트 타입을 dao(mapper)로 부터 받는다.
-   public int addNotice(NoticeDto noticeDto);
+   public int addNotice(NoticeDto noticeDto); // 삽입
+   public int deleteNotice(int noticeNo); // 삭제
+   public int modifyNotice(NoticeDto noticeDto);// 수정
+   public NoticeDto getNotice(int noticeNo);//상세보기
 }

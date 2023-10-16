@@ -36,17 +36,24 @@ public class NoticeServiceImpl implements NoticeService {
   
   //상세 조회
   
-  
+  @Override
+  public NoticeDto getNotice(int noticeNo) {
+    return noticeMapper.getNotice(noticeNo);
+  }
   
   
   //수정
   
   
-  
+  @Override
+  public int modifyNotice(NoticeDto noticeDto) {
+    
+    return noticeMapper.modifyNotice(noticeDto);
+  }
   
   
   //삭제
-  
+
   
   
 }

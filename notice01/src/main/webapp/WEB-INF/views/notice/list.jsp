@@ -18,9 +18,10 @@ if(addResult!=='')
 		{
 		alert('공지사항이 등록되었습니다.');
 		}
+	else {
+		alert('공지사항이 등록되지 않았습니다.');}
 	
-	}else {
-	alert('공지사항이 등록되지 않았습니다.');}
+	}
 
 
 
@@ -40,7 +41,7 @@ if(addResult!=='')
   <div>
   <h3> 공지번호 :${n.noticeNo}</h3>
   <h3> 구분 : ${n.gubun}</h3>
-  <h3> 제목 : ${n.title}</h3>
+  <h3> <a href="${contextPath}/notice/detail.do?noticeNo=${n.noticeNo}">제목 : ${n.title}</a></h3>
   <hr>
   </div>
   

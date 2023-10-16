@@ -11,7 +11,6 @@
  <select id="getNoticeList" resultType="NoticeDto">
  SELECT NOTICE_NO , GUBUN ,TITLE ,CONTENT FROM NOTICE_T
        ORDER BY NOTICE_NO DESC
- 
  </select>
  
  <!-- 삽입  -->
@@ -19,8 +18,18 @@
  INSERT INTO NOTICE_T(NOTICE_NO, GUBUN, TITLE,CONTENT) VALUES(NOTICE_SEQ.NEXTVAL,#{gubun},#{title},#{content} )
  </insert>
  
- 
- 
  <!-- 상세 조회  -->
+ <select id="getNotice" parameterType="int" resultType="NoticeDto">
+ SELECT NOTICE_NO, GUBUN, TITLE, CONTENT FROM NOTICE_T WHERE NOTICE_NO = #{noticeNo}  
+ </select>
+ 
+ <!-- 수정  -->
+<update id="modifyNotice" parameterType="NoticeDto" >
+UPDATE NOTICE_T 
+SET GUBUN =#{gubun}, 
+    TITLE =#{title}, 
+    CONTENT=#{content1}
+ WHERE NOTICE_NO=#{noticeNo} 
+</update>
  
 </mapper>

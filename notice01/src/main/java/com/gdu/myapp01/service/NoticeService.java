@@ -8,6 +8,7 @@ public interface NoticeService {
 
 public List<NoticeDto> getNoticeList();
 public int addNotice(NoticeDto noticeDto); // insert는 int로 받기로 약속됨.
-
+public NoticeDto getNotice(int noticeNo);
+public int modifyNotice(NoticeDto noticeDto);
   
 }
