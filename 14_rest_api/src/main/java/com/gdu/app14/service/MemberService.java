@@ -12,15 +12,18 @@ public interface MemberService {
   public Map<String, Object> register(MemberDto memberDto, HttpServletResponse response);
   
   // 회원 목록
-  public Map<String, Object> getMembers(int page); // 목록+페이지
+  public Map<String, Object> getMembers(int page);
   
+  // 회원 조회
+  public Map<String, Object> getMember(int memberNo);
   
+  // 회원 정보 수정
+  public Map<String, Object> modifyMember(MemberDto memberDto);
   
+  // 회원 정보 삭제
+  public Map<String, Object> removeMember(int memberNo);
   
-  
-  
-  
-  
-  
+  // 회원들 정보 삭제
+  public Map<String, Object> removeMembers(String memberNoList);
   
 }
