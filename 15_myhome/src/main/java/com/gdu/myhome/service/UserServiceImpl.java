@@ -49,7 +49,7 @@ public void login(HttpServletRequest request, HttpServletResponse response) {
      // 메인 페이지로 되돌아가
         try {
           
-          response.sendRedirect(request.getContextPath()+"/main.do");
+          response.sendRedirect(request.getParameter("referer"));
           
           
         } catch (Exception e) {

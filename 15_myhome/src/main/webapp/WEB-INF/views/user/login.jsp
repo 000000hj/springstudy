@@ -19,7 +19,10 @@
       <label for="pw">비밀번호</label>
       <input type="password" name="pw" id="pw" placeholder="●●●●●●">
     </div>
+    
+    
     <div>
+      <input type="hidden" name="referer" value="${referer}">
       <button type="submit">로그인</button>
     </div>
   </form>
