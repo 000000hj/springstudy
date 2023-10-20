@@ -1,8 +1,12 @@
 package com.gdu.myhome.controller;
 
+import java.util.Map;
+
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
+import org.springframework.http.MediaType;
+import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -23,9 +27,9 @@ public class UserController {
   
   @GetMapping("/login.form")
   public String loginForm(HttpServletRequest request, Model model) {
-    // referer  : 이전 주소가 저장되는 요청 Header 값
-    String referer=request.getHeader("referer");
-    model.addAttribute("referer",referer == null ? request.getContextPath()+"/main.do":referer);
+    // referer : 이전 주소가 저장되는 요청 Header 값
+    String referer = request.getHeader("referer");
+    model.addAttribute("referer", referer == null ? request.getContextPath() + "/main.do" : referer);
     return "user/login";
   }
   
@@ -41,32 +45,35 @@ public class UserController {
   
   @GetMapping("/agree.form")
   public String agreeForm() {
-    
     return "user/agree";
   }
   
-  
-  
   @GetMapping("/join.form")
-  public String joinForm(@RequestParam(value = "event",required = false,defaultValue = "off")  String service,
-                         @RequestParam(value = "event",required = false,defaultValue = "off")  String event 
-                                         ,Model model) {
-    
-    
-    // 주소창에 직접 입력해서 접속할 시  메인 화면으로 리다이렉트 시켜버릴것
-    String rtn=null;
-   if(service.equals("off")) {
-     rtn="redirect:/main.do";
-   }else {
-
-     model.addAttribute("event",event); //user 폴더 join.jsp 전달하는 event 는 "on" 또느 "off" 값을 가진다.
-    rtn="user/join";
+  public String joinForm(@RequestParam(value="service", required=false, defaultValue="off") String service
+                       , @RequestParam(value="event", required=false, defaultValue="off") String event
+                       , Model model) {
+    String rtn = null;
+    if(service.equals("off")) {
+      rtn = "redirect:/main.do";
+    } else {
+      model.addAttribute("event", event);  // user 폴더 join.jsp로 전달하는 event는 "on" 또는 "off" 값을 가진다.
+      rtn = "user/join";
+    }
+    return rtn;
   }
-    
-   
-   return  rtn; 
-    
+  
+  @GetMapping(value="/checkEmail.do", produces=MediaType.APPLICATION_JSON_VALUE)
+  public ResponseEntity<Map<String, Object>> checkEmail(@RequestParam String email) {
+    System.out.println(email);
+    return userService.checkEmail(email);
   }
+  
+  @GetMapping(value="/sendCode.do", produces=MediaType.APPLICATION_JSON_VALUE)
+  public ResponseEntity<Map<String, Object>> sendCode(@RequestParam String email) {
+    return userService.sendCode(email);
+  }
+  
+  
   
   
 }
