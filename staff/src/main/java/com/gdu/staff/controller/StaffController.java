@@ -31,7 +31,6 @@ public class StaffController {
     //목록 보여줘
     @GetMapping(value="/list.do", produces="application/json")
     public ResponseEntity<Map<String, Object>> list(@RequestParam StaffDto staff) {
-      System.out.println("에엑따:"+staff.toString());
       return staffService.getStaffList(staff);
     }
     
