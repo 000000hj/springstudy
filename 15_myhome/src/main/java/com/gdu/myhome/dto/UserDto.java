@@ -22,7 +22,7 @@ public class UserDto {
   private String roadAddress;
   private String jibunAddress;
   private String detailAddress;
-  private int agree;   // value가 int 타입이 아닌  on 또는 off라서 UserDto형태로 받을 수 없다(커맨드 객체) 
+  private int agree;
   private Date pwModifiedAt ;
   private Date joinedAt ;
 }
