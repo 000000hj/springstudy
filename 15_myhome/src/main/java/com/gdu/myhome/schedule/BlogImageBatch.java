@@ -14,8 +14,8 @@ public class BlogImageBatch {
   private final BlogService blogService;
   
   
-  @Scheduled(cron = "0 0/1 * 1/1 * ?")
- // @Scheduled(cron="0 0 1 1/1 * ?")  // 매일 새벽 1시에 동작
+  //@Scheduled(cron = "0 0/1 * 1/1 * ?")
+ @Scheduled(cron="0 0 1 1/1 * ?")  // 매일 새벽 1시에 동작
   public void execute() {
     blogService.blogImageBatch();
   }
