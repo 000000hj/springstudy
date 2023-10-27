@@ -101,43 +101,41 @@ public class FreeServiceImpl implements FreeService {
     
   }
   
-
-  
- @Override
-  public int removeFree(int freeNo) {
-   return freeMapper.deleteFree(freeNo);
-  } 
-  
-  
   @Override
-  public void loadSearchList(HttpServletRequest request, Model model) {
-    
-    String column= request.getParameter("column");
-    String query= request.getParameter("query");
-    
-    
-    
-    //검색 결과 갯수 구하기
-   Map<String, Object>map=new HashMap<>();
-   map.put("column", column);
-   map.put("query", query);
-    
-   int total=freeMapper.getSearchCount(map);
-   Optional<String>opt=Optional.ofNullable(request.getParameter("page"));
-   String strPage=opt.orElse("1");
-   int page=Integer.parseInt(strPage);
-   int display=10;
-   myPageUtils.setPaging(page, total, display);
-   
-   map.put("begin",myPageUtils.getBegin());
-   map.put("end",myPageUtils.getEnd());
-   List<FreeDto>freelist=freeMapper.getSearchList(map);
-   
-   model.addAttribute("freeList", freelist);
-   model.addAttribute("paging", myPageUtils.getMvcPaging(request.getContextPath() + "/free/search.do"));
-   model.addAttribute("beginNo", total - (page - 1) * display);
+  public int removeFree(int freeNo) {
+    return freeMapper.deleteFree(freeNo);
   }
   
+  @Transactional(readOnly=true)
+  @Override
+  public void loadSearchList(HttpServletRequest request, Model model) {
   
+    String column = request.getParameter("column");
+    String query = request.getParameter("query");
+    
+    Map<String, Object> map = new HashMap<>();
+    map.put("column", column);
+    map.put("query", query);
+    
+    int total = freeMapper.getSearchCount(map);
+    
+    Optional<String> opt = Optional.ofNullable(request.getParameter("page"));
+    String strPage = opt.orElse("1");
+    int page = Integer.parseInt(strPage);
+    
+    int display = 10;
+    
+    myPageUtils.setPaging(page, total, display);
+    
+    map.put("begin", myPageUtils.getBegin());
+    map.put("end", myPageUtils.getEnd());
+    
+    List<FreeDto> freeList = freeMapper.getSearchList(map);
+    
+    model.addAttribute("freeList", freeList);
+    model.addAttribute("paging", myPageUtils.getMvcPaging(request.getContextPath() + "/free/search.do", "column=" + column + "&query=" + query));
+    model.addAttribute("beginNo", total - (page - 1) * display);
+    
+  }
   
 }
