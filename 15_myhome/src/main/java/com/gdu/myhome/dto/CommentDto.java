@@ -18,4 +18,5 @@ public class CommentDto {
   private int status;
   private int depth;
   private int groupNo;
+  private UserDto userDto;// private int userNo
 }

@@ -2,8 +2,10 @@ package com.gdu.myhome.service;
 
 import java.io.File;
 import java.nio.file.Path;
+import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.Optional;
 import java.util.stream.Collectors;
 
 import javax.servlet.http.HttpServletRequest;
@@ -13,22 +15,30 @@ import org.jsoup.nodes.Document;
 import org.jsoup.nodes.Element;
 import org.jsoup.select.Elements;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
+import org.springframework.ui.Model;
 import org.springframework.web.multipart.MultipartFile;
 import org.springframework.web.multipart.MultipartHttpServletRequest;
 
 import com.gdu.myhome.dao.BlogMapper;
 import com.gdu.myhome.dto.BlogDto;
 import com.gdu.myhome.dto.BlogImageDto;
+import com.gdu.myhome.dto.CommentDto;
+import com.gdu.myhome.dto.UserDto;
 import com.gdu.myhome.util.MyFileUtils;
+import com.gdu.myhome.util.MyPageUtils;
 
 import lombok.RequiredArgsConstructor;
 
+
+@Transactional
 @RequiredArgsConstructor
 @Service
 public class BlogServiceImpl implements BlogService {
 
   private final BlogMapper blogMapper;
   private final MyFileUtils myFileUtils;
+  private final MyPageUtils myPageUtils;
   
   @Override
   public Map<String, Object> imageUpload(MultipartHttpServletRequest multipartRequest) {
@@ -80,7 +90,9 @@ public class BlogServiceImpl implements BlogService {
     BlogDto blog = BlogDto.builder()
                     .title(title)
                     .contents(contents)
-                    .userNo(userNo)
+                    .userDto(UserDto.builder()
+                                    .userNo(userNo)
+                                    .build())
                     .ip(ip)
                     .build();
     
@@ -135,4 +147,81 @@ public class BlogServiceImpl implements BlogService {
     
   }
   
+  
+  @Transactional(readOnly = true)
+  @Override
+  public void loadBlogList(HttpServletRequest request, Model model) {
+    
+    
+    /*페이지 번호*/
+    Optional<String>opt = Optional.ofNullable(request.getParameter("page"));
+    int page=Integer.parseInt(opt.orElse("1"));// 없으면 1꺼내써
+    int total= blogMapper.getBlogCount();
+    int display= 10;  // request로 jsp 에서 받아올수 있음.
+    
+    myPageUtils.setPaging(page, total, display);
+    
+    Map<String,Object>map=Map.of("begin",myPageUtils.getBegin()
+                                  ,"end",myPageUtils.getEnd());
+    //목록 가져오기
+    List<BlogDto> blogList=blogMapper.getBlogList(map);
+    
+    //jsp에 전달할거 모델에 실어
+    model.addAttribute("blogList",blogList);
+    model.addAttribute("paging",myPageUtils.getMvcPaging(request.getContentType()+"/blog/list.do"));
+    model.addAttribute("beginNo", total-(page-1)*display);
+  }
+  
+  
+  @Override
+  public int increaseHit(int BlogNo) {
+    return blogMapper.updateHit(BlogNo);
+  }
+  
+  
+  @Override
+  public BlogDto getBlog(int blogNo) {
+    return blogMapper.getBlog(blogNo);
+  }
+  
+  
+  @Override
+  public Map<String, Object> addComment(HttpServletRequest request) {
+    String contents=request.getParameter("contents");
+    int userNo=Integer.parseInt(request.getParameter("userNo"));
+    int blogNo=Integer.parseInt(request.getParameter("blogNo"));
+    
+    CommentDto comment=CommentDto.builder()
+                      .contents(contents)
+                      .userDto(UserDto.builder()
+                                      .userNo(userNo)
+                                      .build())
+                      .blogNo(blogNo)
+                      .build();
+    
+    int addCommentResult=blogMapper.insertComment(comment);
+    return Map.of("addCommentResult",addCommentResult);
+  }
+  
+  
+  
+  @Override
+  public Map<String, Object> loadCommentList(HttpServletRequest request) {
+   int page=Integer.parseInt(request.getParameter("page"));
+   int blogNo=Integer.parseInt(request.getParameter("blogNo"));
+   int total=blogMapper.getCommentCount(blogNo);
+   int display=10;
+   
+   myPageUtils.setPaging(page, total, display);
+   Map<String, Object>map=Map.of("blogNo",blogNo,"begin",myPageUtils.getBegin(),"end",myPageUtils.getEnd()); 
+   
+   List<CommentDto>commentList=blogMapper.getCommentList(map);
+   String paging =myPageUtils.getAjaxPaging();
+   
+   Map<String , Object>result= new HashMap<>();
+   result.put("commentList",commentList);
+   result.put("paging", paging);
+   
+    return result;
+  }
 }
