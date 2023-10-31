@@ -18,6 +18,11 @@ public interface BlogService {
                                                                     // 리퀘스트는 추후의 다른 전달을 대비한것
   public int increaseHit(int BlogNo);
   public BlogDto getBlog(int blogNo);
+  public int modifyBlog(HttpServletRequest request);
+  public int removeBlog(int blogNo);
   public Map<String, Object>addComment(HttpServletRequest request);
   public Map<String, Object> loadCommentList(HttpServletRequest request);       
+  public Map<String, Object>addCommentReply(HttpServletRequest request);
+  public Map<String, Object>removeComment(int commentNo);
+ 
 }

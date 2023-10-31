@@ -50,9 +50,8 @@ public class BlogController {
     return "redirect:/blog/list.do";
   }
   
-  
   @GetMapping("/increaseHit.do")
-  public String increaseHit(@RequestParam(value="blogNo", required=false, defaultValue="0") int blogNo) {
+  public String increseHit(@RequestParam(value="blogNo", required=false, defaultValue="0") int blogNo) {
     int increseResult = blogService.increaseHit(blogNo);
     if(increseResult == 1) {
       return "redirect:/blog/detail.do?blogNo=" + blogNo;
@@ -68,20 +67,54 @@ public class BlogController {
     model.addAttribute("blog", blog);
     return "blog/detail";
   }
-    
+  
+  @PostMapping("/edit.form")
+  public String edit(@RequestParam(value="blogNo", required=false, defaultValue="0") int blogNo
+                   , Model model) {
+    BlogDto blog = blogService.getBlog(blogNo);
+    model.addAttribute("blog", blog);
+    return "blog/edit";
+  }
+  
+  @PostMapping("/modifyBlog.do")
+  public String modifyBlog(HttpServletRequest request, RedirectAttributes redirectAttributes) {
+    int modifyResult = blogService.modifyBlog(request);
+    redirectAttributes.addFlashAttribute("modifyResult", modifyResult);
+    return "redirect:/blog/detail.do?blogNo=" + request.getParameter("blogNo");
+  }
+  
+  @PostMapping("/remove.do")
+  public String remove(@RequestParam(value="blogNo", required=false, defaultValue="0") int blogNo
+                     , RedirectAttributes redirectAttributes) {
+    int removeResult = blogService.removeBlog(blogNo);
+    redirectAttributes.addFlashAttribute("removeResult", removeResult);
+    return "redirect:/blog/list.do";
+  }
   
   @ResponseBody
-  @PostMapping(value = "/addComment.do",produces = "application/json")
-  public Map<String, Object>addComment(HttpServletRequest request){
+  @PostMapping(value="/addComment.do", produces="application/json")
+  public Map<String, Object> addComment(HttpServletRequest request) {
     return blogService.addComment(request);
   }
   
-  
   @ResponseBody
-  @GetMapping(value = "/commentList.do",produces = "application/json")
-  public Map<String, Object>commentList(HttpServletRequest request){
-  return blogService.loadCommentList(request);  
+  @GetMapping(value="/commentList.do", produces="application/json")
+  public Map<String, Object> commentList(HttpServletRequest request){
+    return blogService.loadCommentList(request);
   }
   
   
+  @ResponseBody
+  @PostMapping(value="/addCommentReply.do", produces="application/json")
+  public Map<String, Object> addCommentReply(HttpServletRequest request) {
+    return blogService.addCommentReply(request);
+  }
+  
+  
+  @ResponseBody
+  @PostMapping(value ="/removeComment.do", produces = "application/json" )
+  public Map<String, Object> removeComment(@RequestParam(value = "commentNo",required = false ,defaultValue = "0")int commentNo){
+  
+  return blogService.removeComment(commentNo);
+}
 }
