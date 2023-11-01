@@ -27,7 +27,7 @@
   <hr>
   
   <div>
-    <table border="1">
+    <table border="1" class="table">
       <thead>
         <tr>
           <td>순번</td>
@@ -51,7 +51,7 @@
               <c:forEach begin="1" end="${free.depth}" step="1">&nbsp;&nbsp;</c:forEach>
               <!-- 댓글은 댓글 아이콘 부착하기 -->
               <c:if test="${free.depth != 0}">
-                <i class="fa-brands fa-replyd"></i>
+                <i class="fa-solid fa-reply fa-rotate-180"></i>
               </c:if>
               <!-- 게시글 내용  -->
               ${free.contents}
@@ -84,7 +84,7 @@
               <form method="post" action="${contextPath}/free/addReply.do">
                 <div>
                   <label for="email">작성자</label>
-                  <input type="text" name="email" id="email" value="${sessionScope.user.email}" readonly>
+                  <input type="text" name="email" id="email" value="${sessionScope.user.email}"  class="form-control-plaintext" readonly>
                 </div>
                 <div>
                   <label for="contents">내용</label>
@@ -114,7 +114,7 @@
                   <option value="EMAIL">작성자</option>
                   <option value="CONTENTS">내용</option>
               </select>
-              <input type="text" name="query" placeholder="검색어 입력">
+              <input type="text" name="query" placeholder="검색어 입력" class="form-control">
               <button type="submit" class="btn btn-outline-primary">검색</button>
         </form>
     </div>

@@ -30,7 +30,6 @@ import com.gdu.myhome.util.MyPageUtils;
 
 import lombok.RequiredArgsConstructor;
 
-
 @Transactional
 @RequiredArgsConstructor
 @Service
@@ -91,8 +90,8 @@ public class BlogServiceImpl implements BlogService {
                     .title(title)
                     .contents(contents)
                     .userDto(UserDto.builder()
-                                    .userNo(userNo)
-                                    .build())
+                              .userNo(userNo)
+                              .build())
                     .ip(ip)
                     .build();
     
@@ -122,6 +121,7 @@ public class BlogServiceImpl implements BlogService {
     
   }
   
+  @Transactional(readOnly=true)
   public void blogImageBatch() {
     
     // 1. 어제 작성된 블로그의 이미지 목록 (DB)
@@ -147,45 +147,39 @@ public class BlogServiceImpl implements BlogService {
     
   }
   
-  
-  @Transactional(readOnly = true)
+  @Transactional(readOnly=true)
   @Override
   public void loadBlogList(HttpServletRequest request, Model model) {
-    
-    
-    /*페이지 번호*/
-    Optional<String>opt = Optional.ofNullable(request.getParameter("page"));
-    int page=Integer.parseInt(opt.orElse("1"));// 없으면 1꺼내써
-    int total= blogMapper.getBlogCount();
-    int display= 10;  // request로 jsp 에서 받아올수 있음.
+  
+    Optional<String> opt = Optional.ofNullable(request.getParameter("page"));
+    int page = Integer.parseInt(opt.orElse("1"));
+    int total = blogMapper.getBlogCount();
+    int display = 10;
     
     myPageUtils.setPaging(page, total, display);
     
-    Map<String,Object>map=Map.of("begin",myPageUtils.getBegin()
-                                  ,"end",myPageUtils.getEnd());
-    //목록 가져오기
-    List<BlogDto> blogList=blogMapper.getBlogList(map);
+    Map<String, Object> map = Map.of("begin", myPageUtils.getBegin()
+                                   , "end", myPageUtils.getEnd());
     
-    //jsp에 전달할거 모델에 실어
-    model.addAttribute("blogList",blogList);
-    model.addAttribute("paging",myPageUtils.getMvcPaging(request.getContentType()+"/blog/list.do"));
-    model.addAttribute("beginNo", total-(page-1)*display);
+    List<BlogDto> blogList = blogMapper.getBlogList(map);
+    
+    model.addAttribute("blogList", blogList);
+    model.addAttribute("paging", myPageUtils.getMvcPaging(request.getContextPath() + "/blog/list.do"));
+    model.addAttribute("beginNo", total - (page - 1) * display);
+    
   }
-  
   
   @Override
-  public int increaseHit(int BlogNo) {
-    return blogMapper.updateHit(BlogNo);
+  public int increaseHit(int blogNo) {
+    return blogMapper.updateHit(blogNo);
   }
   
-  
+  @Transactional(readOnly=true)
   @Override
   public BlogDto getBlog(int blogNo) {
     return blogMapper.getBlog(blogNo);
   }
-  
-  
-  
+
   @Override
   public int modifyBlog(HttpServletRequest request) {
     
@@ -205,79 +199,86 @@ public class BlogServiceImpl implements BlogService {
     
   }
   
-  
   @Override
   public int removeBlog(int blogNo) {
     return blogMapper.deleteBlog(blogNo);
   }
+  
+  
   @Override
   public Map<String, Object> addComment(HttpServletRequest request) {
-    String contents=request.getParameter("contents");
-    int userNo=Integer.parseInt(request.getParameter("userNo"));
-    int blogNo=Integer.parseInt(request.getParameter("blogNo"));
+
+    String contents = request.getParameter("contents");
+    int userNo = Integer.parseInt(request.getParameter("userNo"));
+    int blogNo = Integer.parseInt(request.getParameter("blogNo"));
     
-    CommentDto comment=CommentDto.builder()
-                      .contents(contents)
-                      .userDto(UserDto.builder()
-                                      .userNo(userNo)
-                                      .build())
-                      .blogNo(blogNo)
-                      .build();
+    CommentDto comment = CommentDto.builder()
+                          .contents(contents)
+                          .userDto(UserDto.builder()
+                                    .userNo(userNo)
+                                    .build())
+                          .blogNo(blogNo)
+                          .build();
     
-    int addCommentResult=blogMapper.insertComment(comment);
-    return Map.of("addCommentResult",addCommentResult);
+    int addCommentResult = blogMapper.insertComment(comment);
+    
+    return Map.of("addCommentResult", addCommentResult);
+    
   }
-  
-  
-  
+
+  @Transactional(readOnly=true)
   @Override
   public Map<String, Object> loadCommentList(HttpServletRequest request) {
-   int page=Integer.parseInt(request.getParameter("page"));
-   int blogNo=Integer.parseInt(request.getParameter("blogNo"));
-   int total=blogMapper.getCommentCount(blogNo);
-   int display=10;
-   
-   myPageUtils.setPaging(page, total, display);
-   Map<String, Object>map=Map.of("blogNo",blogNo,"begin",myPageUtils.getBegin(),"end",myPageUtils.getEnd()); 
-   
-   List<CommentDto>commentList=blogMapper.getCommentList(map);
-   String paging =myPageUtils.getAjaxPaging();
-   
-   Map<String , Object>result= new HashMap<>();
-   result.put("commentList",commentList);
-   result.put("paging", paging);
-   
+
+    int blogNo = Integer.parseInt(request.getParameter("blogNo"));
+    
+    int page = Integer.parseInt(request.getParameter("page"));
+    int total = blogMapper.getCommentCount(blogNo);
+    int display = 10;
+    
+    myPageUtils.setPaging(page, total, display);
+    
+    Map<String, Object> map = Map.of("blogNo", blogNo
+                                   , "begin", myPageUtils.getBegin()
+                                   , "end", myPageUtils.getEnd());
+    
+    List<CommentDto> commentList = blogMapper.getCommentList(map);
+    String paging = myPageUtils.getAjaxPaging();
+    
+    Map<String, Object> result = new HashMap<String, Object>();
+    result.put("commentList", commentList);
+    result.put("paging", paging);
     return result;
+    
   }
-  
-  
   
   @Override
   public Map<String, Object> addCommentReply(HttpServletRequest request) {
-
-    String contents=request.getParameter("contents");
-    int userNo=Integer.parseInt(request.getParameter("userNo"));
-    int blogNo=Integer.parseInt(request.getParameter("blogNo"));
-    int groupNo=Integer.parseInt(request.getParameter("groupNo"));
     
-    CommentDto comment=CommentDto.builder()
-                      .contents(contents)
-                      .userDto(UserDto.builder()
-                                      .userNo(userNo)
-                                      .build())
-                      .blogNo(blogNo)
-                      .groupNo(groupNo)
-                      .build();
+    String contents = request.getParameter("contents");
+    int userNo = Integer.parseInt(request.getParameter("userNo"));
+    int blogNo = Integer.parseInt(request.getParameter("blogNo"));
+    int groupNo = Integer.parseInt(request.getParameter("groupNo"));
     
-    int addCommentReplyResult=blogMapper.insertCommentReply(comment);
-    return Map.of("addCommentReplyResult",addCommentReplyResult);
+    CommentDto comment = CommentDto.builder()
+                          .contents(contents)
+                          .userDto(UserDto.builder()
+                                    .userNo(userNo)
+                                    .build())
+                          .blogNo(blogNo)
+                          .groupNo(groupNo)
+                          .build();
+    
+    int addCommentReplyResult = blogMapper.insertCommentReply(comment);
+    
+    return Map.of("addCommentReplyResult", addCommentReplyResult);
+    
   }
-  
   
   @Override
   public Map<String, Object> removeComment(int commentNo) {
-    int removeResult=blogMapper.deleteComment(commentNo);
-    return Map.of("removeResult",removeResult);
+    int removeResult = blogMapper.deleteComment(commentNo);
+    return Map.of("removeResult", removeResult);
   }
-
+  
 }
