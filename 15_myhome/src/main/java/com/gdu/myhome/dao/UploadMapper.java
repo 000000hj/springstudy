@@ -13,5 +13,10 @@ public interface UploadMapper {
   public int insertUpload(UploadDto upload);
   public int insertAttach(AttachDto attach);
   public int getUploadCount();
-  public List<UploadDto> getUploadList(Map<String, Object>map);// 확장을 위해서 Map<String,Integer>로 안썼다.
+  public List<UploadDto> getUploadList(Map<String, Object> map);
+  public UploadDto getUpload(int uploadNo);
+  public List<AttachDto> getAttachList(int uploadNo);
+  public AttachDto getAttach(int attachNo);
+  public int updateDownloadCount(int attachNo);
+
 }

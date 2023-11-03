@@ -48,12 +48,9 @@
 
 <script>
 
-  // 전역 변수
-  var page = 1;
-  var totalPage = 0;
+ 
 
   
-
   
   
   const fnGetUploadList = () => {
@@ -68,9 +65,14 @@
 			  totalPage = resData.totalPage;
 			 
 		    $.each(resData.uploadList, (i, upload) => {
-		    	let str = '<div class="upload">';
+		    	let str = '<div class="upload" data-upload_no="' + upload.uploadNo + '">';
 		    	str += '<div>제목: ' + upload.title + '</div>';
-		    	str += '<div>작성: ' + upload.userDto.name + '</div>';
+		    	if(upload.userDto === null){
+		    		str+='<div>작성:정보없음</div>';
+		    	}
+		    	else {
+		    		str += '<div>작성: ' + upload.userDto.name + '</div>';
+				}
 		    	str += '<div>생성: ' + upload.createdAt + '</div>';
 		    	str += '<div>첨부: ' + upload.attachCount + '개</div>';
 		    	str += '</div>';
@@ -81,15 +83,14 @@
   }
   
   
-  let addResult = '${addResult}';  // '', 'true', 'false'
-  if(addResult !== ''){
-	  if(addResult === 'true'){
-		  alert('성공적으로 업로드 되었습니다.');
-		  $('#upload_list').empty();
-		  fnGetUploadList();
-	  } else {
-		  alert('업로드가 실패하였습니다.');
-	  }
+
+  
+  const fnDetail=()=>{
+	
+	  $(document).on('click','.upload',function(){
+
+		 location.href='${contextPath}/upload/detail.do?uploadNo='+$(this).data('upload_no');
+	  })
   }
   
   
@@ -124,17 +125,29 @@
 	  
   }
 
-  //const fnAddResult = () => {
-	 
-  //}
+  // 전역 변수
+  var page = 1;
+  var totalPage = 0;
+
+  const fnAddResult = () => {
+	  let addResult = '${addResult}';  // '', 'true', 'false'
+	  if(addResult !== ''){
+		  if(addResult === 'true'){
+			  alert('성공적으로 업로드 되었습니다.');
+			  $('#upload_list').empty();
+		  } else {
+			  alert('업로드가 실패하였습니다.');
+		  }
+	  }
+	  
+	  }
   
   
 
-  
- // fnGetUploadList();
-  fnScroll();
   fnAddResult();
-	
+  fnGetUploadList();
+  fnScroll();
+  fnDetail();
 </script>
 
 <%@ include file="../layout/footer.jsp" %>
