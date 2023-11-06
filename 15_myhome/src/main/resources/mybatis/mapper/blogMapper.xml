@@ -31,17 +31,14 @@
     </association>
   </resultMap>
 
-
-  <resultMap type="CommentDto" id="CommentMap">
-  
-  <id column="COMMENT_NO"     property="commentNo"/>
-  <result column="CONTENTS"   property="contents"/>
-  <result column="BLOG_NO"    property="blogNo"/>
-  <result column="CREATED_AT" property="createdAt"/>
-  <result column="STATUS"     property="status"/>
-  <result column="DEPTH"      property="depth"/>
-  <result column="GROUP_NO"   property="groupNo"/>
-  
+  <resultMap type="CommentDto"    id="CommentMap">
+    <id      column="COMMENT_NO"  property="commentNo"/>
+    <result  column="CONTENTS"    property="contents"/>
+    <result  column="BLOG_NO"     property="blogNo"/>
+    <result  column="CREATED_AT"  property="createdAt"/>
+    <result  column="STATUS"      property="status"/>
+    <result  column="DEPTH"       property="depth"/>
+    <result  column="GROUP_NO"    property="groupNo"/>
     <association javaType="UserDto"      property="userDto">
       <id        column="USER_NO"        property="userNo"/>
       <result    column="EMAIL"          property="email" />
@@ -58,9 +55,7 @@
       <result    column="PW_MODIFIED_AT" property="pwModifiedAt" />
       <result    column="JOINED_AT"      property="joinedAt" />
     </association>
-  
   </resultMap>
-
 
   <!--
     처리 순서
@@ -124,38 +119,42 @@
   
   <update id="updateHit" parameterType="int">
     UPDATE BLOG_T
-       SET HIT =HIT+1
-     WHERE BLOG_NO= #{blogNo}
+       SET HIT = HIT + 1
+     WHERE BLOG_NO = #{blogNo}  
   </update>
   
   <select id="getBlog" parameterType="int" resultMap="BlogMap">
-    SELECT B.BLOG_NO, B.TITLE , B.CONTENTS, B.HIT, B.IP, B.CREATED_AT , B.MODIFIED_AT,U.USER_NO,U.EMAIL,U.NAME
+    SELECT B.BLOG_NO, B.TITLE, B.CONTENTS, B.HIT, B.IP, B.CREATED_AT, B.MODIFIED_AT, U.USER_NO, U.EMAIL, U.NAME
       FROM USER_T U, BLOG_T B
-     WHERE U.USER_NO= B.USER_NO
+     WHERE U.USER_NO = B.USER_NO
        AND B.BLOG_NO = #{blogNo}
-       
-  <!-- SELECT B.BLOG_NO, B.TITLE , B.CONTENTS, B.HIT, B.IP, B.CREATED_AT , B.MODIFIED_AT,U.USER_NO,U.EMAIL,U.NAME
-      FROM USER_T U INNER JOIN BLOG_T B
-     ON U.USER_NO= B.USER_NO
-       WHERE B.BLOG_NO = #{blogNo};
-       위의 오라클 쿼리는 이 기본쿼리와 같다. -->  
   </select>
-  
-  
-  <update id="updateBlog" parameterType="BlogDto" >
-    UPDATE BLOG_T 
-       SET TITLE=#{title}
-       ,   CONTENTS=#{contents}
-       ,   MODIFIED_AT = TO_CHAR(SYSDATE, 'YYYY-MM-DD HH:MI:SS')    
-     WHERE BLOG_NO=#{blogNo}
+
+  <update id="updateBlog" parameterType="BlogDto">
+    UPDATE BLOG_T
+       SET TITLE = #{title}
+         , CONTENTS = #{contents}
+         , MODIFIED_AT = TO_CHAR(SYSDATE, 'YYYY-MM-DD HH:MI:SS')
+     WHERE BLOG_NO = #{blogNo}
   </update>
   
+  <select id="getBlogImageList" parameterType="int" resultType="BlogImageDto">
+    SELECT BLOG_NO, IMAGE_PATH, FILESYSTEM_NAME
+      FROM BLOG_IMAGE_T
+     WHERE BLOG_NO = #{blogNo}
+  </select>
+  
+  <delete id="deleteBlogImage" parameterType="int">
+    DELETE
+      FROM BLOG_IMAGE_T
+     WHERE BLOG_NO = #{blogNo}
+  </delete>
+
   <delete id="deleteBlog" parameterType="int">
     DELETE
       FROM BLOG_T
      WHERE BLOG_NO = #{blogNo}
   </delete>
-  
   
   <insert id="insertComment" parameterType="CommentDto">
     INSERT INTO COMMENT_T (
@@ -179,16 +178,12 @@
     )
   </insert>
   
-  <!-- 블로그 번호만 넘어오면 돼서 map으로 해도 됨  -->
   <select id="getCommentCount" parameterType="int" resultType="int">
-  SELECT COUNT(*)
-  FROM COMMENT_T
-  WHERE BLOG_NO=#{blogNo}
-    
-  
+    SELECT COUNT(*)
+      FROM COMMENT_T
+     WHERE BLOG_NO = #{blogNo}
   </select>
-  
-  
+
   <select id="getCommentList" parameterType="Map" resultMap="CommentMap">
     SELECT A.COMMENT_NO, A.CONTENTS, A.BLOG_NO, A.CREATED_AT, A.STATUS, A.DEPTH, A.GROUP_NO, A.USER_NO, A.NAME
       FROM (SELECT ROW_NUMBER() OVER(ORDER BY GROUP_NO DESC, DEPTH ASC, COMMENT_NO DESC) AS RN, C.COMMENT_NO, C.CONTENTS, C.BLOG_NO, C.CREATED_AT, C.STATUS, C.DEPTH, C.GROUP_NO, U.USER_NO, U.NAME
@@ -197,10 +192,9 @@
              WHERE C.BLOG_NO = #{blogNo}) A
      WHERE A.RN BETWEEN #{begin} AND #{end}
   </select>
-  
-  
+
   <insert id="insertCommentReply" parameterType="CommentDto">
-   INSERT INTO COMMENT_T (
+    INSERT INTO COMMENT_T (
         COMMENT_NO
       , CONTENTS
       , USER_NO
@@ -220,14 +214,11 @@
       , #{groupNo}
     )
   </insert>
-  
-  
-  <update id="deleteComment" parameterType="int" >
-  UPDATE COMMENT_T
-          SET STATUS = 0
-        WHERE COMMENT_NO=${commentNo}
-  
+
+  <update id="deleteComment" parameterType="int">
+    UPDATE COMMENT_T
+       SET STATUS = 0
+     WHERE COMMENT_NO = #{commentNo}
   </update>
-  
   
 </mapper>

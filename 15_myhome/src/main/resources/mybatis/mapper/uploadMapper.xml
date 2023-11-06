@@ -104,7 +104,6 @@
      WHERE UPLOAD_NO = #{uploadNo}
   </select>
   
-  
   <select id="getAttach" parameterType="int" resultType="AttachDto">
     SELECT ATTACH_NO, PATH, ORIGINAL_FILENAME, FILESYSTEM_NAME, DOWNLOAD_COUNT, HAS_THUMBNAIL, UPLOAD_NO
       FROM ATTACH_T
@@ -113,9 +112,35 @@
   
   <update id="updateDownloadCount" parameterType="int">
     UPDATE ATTACH_T
-       SET DOWNLOAD_COUNT=DOWNLOAD_COUNT+1
-     WHERE ATTACH_NO  =#{attachNo}
+       SET DOWNLOAD_COUNT = DOWNLOAD_COUNT + 1
+     WHERE ATTACH_NO = #{attachNo}
   </update>
+  
+  <update id="updateUpload" parameterType="UploadDto">
+    UPDATE UPLOAD_T
+       SET TITLE = #{title}
+         , CONTENTS = #{contents}
+         , MODIFIED_AT = TO_CHAR(SYSDATE, 'YYYY-MM-DD HH24:MI:SS')
+     WHERE UPLOAD_NO = #{uploadNo}
+  </update>
+  
+  <delete id="deleteAttach" parameterType="int">
+    DELETE
+      FROM ATTACH_T
+     WHERE ATTACH_NO = #{attachNo}
+  </delete>
+  
+  <delete id="deleteUpload" parameterType="int">
+  DELETE 
+    FROM UPLOAD_T
+   WHERE UPLOAD_NO=#{uploadNo} 
+  </delete>
+  
+  
+  
+  
+  
+  
   
   
   
